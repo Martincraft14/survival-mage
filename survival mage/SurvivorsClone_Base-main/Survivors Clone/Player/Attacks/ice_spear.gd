@@ -1,0 +1,48 @@
+extends Area2D
+
+
+var level = 1
+var hp  = 1
+var speed = 100
+var damage  = 5
+var knockback_amount = 100
+var attack_size = 1.0
+
+var target = Vector2.ZERO
+var angle = Vector2.ZERO
+
+@onready var player = get_tree().get_first_node_in_group("player")
+
+
+signal remove_from_array(object)
+
+func  _ready():
+	#haciendo que el angulo apunte hacia el objetivo 
+	angle = global_position.direction_to(target)
+	#Cojemos el angulo para rotarlo en radiales
+	rotation = angle.angle() + deg_to_rad(135)
+	#miramos el nivel
+	match level:
+		1:
+			hp = 1
+			speed = 100
+			damage = 5
+			knockback_amount = 100
+			attack_size = 1.0
+	
+func _physics_process(delta):
+	#movemos la iceSpear con el angulo y la posición
+	position += angle*speed*delta
+
+#cuando golpea a un enemigo se redice la vida de la lanza, y si es 0 o menor desaparece
+func  enemy_hit(charge = 1):
+	hp -= charge
+	if hp <= 0:
+		#Cuando golpea o pas atiempo se elimina de la cola
+		emit_signal("remove_from_array", self)
+		queue_free()
+
+#si fallamos el disparo hay que eliminar la flecha sino segira hasta que explote le juego 
+func _on_timer_timeout() -> void:
+	emit_signal("remove_from_array", self)
+	queue_free()
