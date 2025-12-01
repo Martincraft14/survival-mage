@@ -8,6 +8,13 @@ extends Node2D
 
 var time = 0
 
+signal changetime(time)
+
+
+func _ready():
+	connect("changetime",Callable(player,"change_time"))
+	
+
 #corremos un Timer cada segundo
 func _on_timer_timeout():
 	#añadimos un segundo
@@ -33,7 +40,7 @@ func _on_timer_timeout():
 					#Lo spawnea en el mundo
 					add_child(enemy_spawn)
 					counter += 1 #subimos el contador hasta que se llege al numero de enemigos que queremos spawnear
-
+	emit_signal("changetime", time)
 
 #Para obtener la posicion aleatoria de spawneao
 func get_random_position():

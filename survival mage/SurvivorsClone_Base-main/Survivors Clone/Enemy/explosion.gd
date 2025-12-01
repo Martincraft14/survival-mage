@@ -6,5 +6,5 @@ func _ready() -> void:
 	
 
 
-func _on_animation_player_animation_finished() -> void:
+func _on_animation_player_animation_finished():
 	queue_free()

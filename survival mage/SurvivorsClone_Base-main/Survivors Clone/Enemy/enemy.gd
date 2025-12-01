@@ -1,30 +1,38 @@
 extends CharacterBody2D
 
 @export var movent_speed = 20.0
-
 @export var hp = 10
-
-@export var knockback_recovery = 3
+@export var knockback_recovery = 3.5
 var knockback = Vector2.ZERO
+#LA CANTIDAD DE EXPERIENCIA AL MORIR
+@export var experience = 1
 
-var death_animation = preload("res://Enemy/explosion.tscn")
+@export var damage = 1
+
 #@onready obtiene un valor cuand se carga el nodo(en este caso enemy)
 #Se usa para referenciar otros nodos
 
-@onready var sprite = $AnimatedSprite2D
+
 
 #Get tree usa todos los nodos, esta por encima del nodo del mundo, seria como cojer
 #le nodod raiz del proyecto
 #Get first node in group nos da el grupo de player, dentro de los nodos del juego
 #como solo est ael grupo player, el enemigo sabe que es el jugador 
+
 @onready var player = get_tree().get_first_node_in_group("player")
-
+@onready var sprite = $AnimatedSprite2D
+var death_animation = preload("res://Enemy/explosion.tscn")
 @onready var sound_hit = $soundHit
+@onready var hitBox =  $HitBox
 
-
+@onready var loot_base = get_tree().get_first_node_in_group("loot")
+var exp_gem = preload("res://Objects/experience_gem.tscn")
 
 #Para poder borrar del array de hitonce
 signal remove_from_array(object)
+
+func _redy():
+	hitBox.damage = damage
 
 #_delta, no suamos delta
 func _physics_process(_delta):
@@ -56,6 +64,12 @@ func death():
 	enemy_death.global_position = global_position # la posicion
 	#la spawneamos en el padre, porque enemy va ha dejar de existir el proximo frmae
 	get_parent().call_deferred("add_child", enemy_death)
+	
+	#SPAWNEAMOS LA GEMA
+	var new_gem = exp_gem.instantiate()
+	new_gem.global_position = global_position
+	new_gem.experience = experience
+	loot_base.call_deferred("add_child", new_gem)
 	
 	queue_free()
 	

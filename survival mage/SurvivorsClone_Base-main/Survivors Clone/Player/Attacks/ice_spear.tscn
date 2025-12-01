@@ -9,24 +9,25 @@ size = Vector2(7.77818, 33.234)
 
 [node name="IceSpear" type="Area2D" groups=["attack"]]
 top_level = true
+scale = Vector2(0.1, 0.1)
 collision_layer = 4
 collision_mask = 0
 script = ExtResource("1_gckcr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_m077b")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(1, -0.5)
 rotation = -0.785398
 shape = SubResource("RectangleShape2D_gckcr")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_m077b")
-
 [node name="Timer" type="Timer" parent="."]
 wait_time = 10.0
 one_shot = true
 autostart = true
 
-[node name="snd_play" type="AudioStreamPlayer" parent="."]
+[node name="snd_iceSpear" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_6ob6w")
 volume_db = -10.0
 pitch_scale = 5.0

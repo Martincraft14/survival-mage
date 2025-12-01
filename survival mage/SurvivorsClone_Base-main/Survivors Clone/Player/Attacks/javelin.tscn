@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3 uid="uid://dk7gscj35rrhh"]
+
+[ext_resource type="Texture2D" uid="uid://7wbnbglquah8" path="res://Textures/Items/Weapons/javelin_3_new.png" id="1_264my"]
+[ext_resource type="Script" uid="uid://jn2rbs3dnn78" path="res://Player/Attacks/javelin.gd" id="1_wo3u8"]
+[ext_resource type="AudioStream" uid="uid://dp24hmq6anjw6" path="res://Audio/SoundEffect/woosh.wav" id="3_a6oke"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wo3u8"]
+size = Vector2(4.94975, 34.6482)
+
+[node name="Javelin" type="Area2D" groups=["attack"]]
+top_level = true
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_wo3u8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 4.47035e-07)
+rotation = -0.785398
+shape = SubResource("RectangleShape2D_wo3u8")
+disabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_264my")
+
+[node name="AttackTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 4.0
+one_shot = true
+autostart = true
+
+[node name="ChangeDirection" type="Timer" parent="."]
+unique_name_in_owner = true
+
+[node name="ResetPostTimer" type="Timer" parent="." groups=["attack"]]
+unique_name_in_owner = true
+wait_time = 3.0
+autostart = true
+
+[node name="snd_javelin" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_a6oke")
+pitch_scale = 2.0
+autoplay = true
+
+[connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
+[connection signal="timeout" from="ChangeDirection" to="." method="_on_change_direction_timeout"]
+[connection signal="timeout" from="ResetPostTimer" to="." method="_on_reset_post_timer_timeout"]
